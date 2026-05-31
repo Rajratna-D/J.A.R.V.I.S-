@@ -1,0 +1,57 @@
+# ============================================================
+# J.A.R.V.I.S. Requirements
+# Just A Rather Very Intelligent System
+# ============================================================
+
+# --- Voice Pipeline ---
+openai-whisper          # Local STT (Whisper base model)
+pyttsx3                 # Local TTS engine
+sounddevice             # Mic recording
+numpy                   # Audio array processing
+scipy                   # WAV file I/O
+
+# --- Wake Word / Hotkey ---
+keyboard                # Global hotkey listener (Alt+J)
+
+# --- System Automation ---
+psutil                  # CPU, RAM, disk stats
+pygetwindow             # Window management
+pycaw                   # Windows Core Audio API (volume)
+screen-brightness-control  # Brightness control via WMI
+pyautogui               # Screenshots, mouse, keyboard automation
+Pillow                  # Image processing for screenshots
+pyperclip               # Clipboard read/write
+pywin32                 # Windows API access (win32api, win32gui, win32con)
+
+# --- AI / LLM ---
+ollama                  # Ollama Python client for Qwen
+
+# --- Web / Info ---
+requests                # HTTP client for APIs
+httpx                   # Async HTTP client
+wikipedia               # Wikipedia API wrapper
+python-dateutil         # Date parsing
+
+# --- Scheduling / Reminders ---
+APScheduler             # Background task scheduler
+
+# --- Notifications ---
+plyer                   # Cross-platform notifications (Windows toast)
+
+# --- Config / Secrets ---
+python-dotenv           # .env file loading
+PyYAML                  # settings.yaml parsing
+
+# --- Data ---
+# sqlite3 is stdlib, no install needed
+
+# --- Utilities ---
+colorama                # Colored terminal output
+python-dateutil         # Natural date/time parsing
+dateparser              # "in 30 minutes", "tomorrow at 9am" parsing
+fuzzywuzzy              # Fuzzy string matching for app names
+python-Levenshtein      # Speed boost for fuzzywuzzy
+
+# --- UI (Phase 1 — Terminal, Phase 2 — PyQt6) ---
+PyQt6                   # GUI framework for HUD
+PyQt6-WebEngine         # WebEngine for HUD animations

@@ -1,0 +1,59 @@
+# ============================================================
+# J.A.R.V.I.S. .gitignore
+# ============================================================
+
+# Secrets — NEVER commit
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Whisper model cache
+.cache/
+*.pt
+
+# Qwen / Ollama model files (large binary)
+*.gguf
+*.bin
+models/
+
+# Database (user data)
+data/*.db
+data/*.sqlite
+
+# Logs
+logs/
+*.log
+
+# Screenshots saved by JARVIS
+screenshots/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# Virtual envs
+venv/
+.venv/
+env/
+
+# Temporary
+*.tmp
+*.bak
+prd_content.txt
