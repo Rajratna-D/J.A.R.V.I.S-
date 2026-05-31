@@ -57,3 +57,6 @@ env/
 *.tmp
 *.bak
 prd_content.txt
+
+# Local progress tracking
+PROGRESS.md
