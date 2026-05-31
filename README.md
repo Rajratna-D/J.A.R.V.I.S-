@@ -31,7 +31,7 @@ J.A.R.V.I.S. is an advanced, natural-language desktop assistant designed exclusi
     *   Animated Arc Reactor status indicator (Idle, Listening, Processing, Speaking, Error).
     *   Real-time system stats (CPU, RAM, Disk) with circular ring gauges.
     *   Integrated bottom-bar text input field and `SEND` button.
-*   **🧠 Local AI Integration (Qwen 2.5 Coder)**:
+*   **🧠 Local AI Integration (Llama 3.2)**:
     *   Runs 100% locally and offline via **Ollama**.
     *   Multi-turn conversational chat with context-preserving session memory.
     *   Assists in writing, rephrasing, code generation, and error debugging.
@@ -75,7 +75,7 @@ graph TD
 
 *   **Layer 0: Foundation**: Loads configurations (`settings.yaml` + `.env`), directories, and establishes global logging.
 *   **Layer 1: Voice Pipeline**: Controls mic-recording buffers and SAPI5 speaking queues.
-*   **Layer 2: Core Brain**: Parses phrasings against 80+ pre-compiled priority regex patterns, falling back to local Qwen 2.5 Coder for natural language queries.
+*   **Layer 2: Core Brain**: Parses phrasings against 80+ pre-compiled priority regex patterns, falling back to local Llama 3.2 for natural language queries.
 *   **Layer 3–7: Skill Layers**: Local system integrations (Win32, comtypes, sqlite3, requests).
 *   **Layer 8: UI HUD**: PyQt6 GUI loop running on the main thread, utilizing signals to update gauges and trigger states.
 
@@ -88,8 +88,8 @@ J.A.R.V.I.S. runs entirely locally. Ensure your system meets these requirements:
 1.  **OS**: Windows 10 or Windows 11 (x64).
 2.  **Python**: Python 3.8 to 3.14.
 3.  **Local LLM Engine**: [Ollama](https://ollama.com/) running on `http://localhost:11434`.
-    *   Download the model: `ollama pull qwen2.5-coder:7b` (or `3b` for lower-end machines).
-4.  **Hardware**: An NVIDIA GPU with at least 4GB VRAM is highly recommended to accelerate the STT (Whisper) and LLM (Qwen) components.
+    *   Download the model: `ollama pull llama3.2` (only 2.0 GB, highly efficient).
+4.  **Hardware**: An NVIDIA GPU with at least 4GB VRAM is highly recommended to accelerate the STT (Whisper) and LLM (Llama) components.
 
 ---
 
@@ -181,7 +181,7 @@ Upon startup, the Arc Reactor will spin up, staggered HUD panels will fade in, a
 | **Reminders** | `"remind me in 10 minutes to take a break"` | Schedules SQLite reminder + fires Windows toast + voice alert. |
 | **Timers** | `"set a timer for 5 minutes"` | Starts background timer visible in HUD. |
 | **Power Control** | `"shut down"`, `"reboot"` | Locks PC or schedules restart with voice confirmation flow. |
-| **AI Assitance** | `"write a python function to scrape a site"` | Opens code window in HUD and generates code using Qwen. |
+| **AI Assitance** | `"write a python function to scrape a site"` | Opens code window in HUD and generates code using Llama 3.2. |
 | **AI Conversational**| `"let's talk"`, `"end conversation"` | Switch between direct command mode and conversational context mode. |
 
 ---
@@ -194,8 +194,8 @@ Ensure you are launching the application using the same Python interpreter where
 #### 2. TTS Voice hangs or keeps running indefinitely
 COM objects must be initialized in secondary threads. JARVIS calls `pythoncom.CoInitialize()` at the startup of the speaker thread to prevent voice locking. If issues persist, verify that your default audio playback device is properly connected and active.
 
-#### 3. Ollama / Qwen AI commands timeout
-Verify that the Ollama application is active in your system tray and that you have pulled the model (`ollama run qwen2.5-coder:7b`). For slower hardware, try upgrading your GPU drivers or switching to a lighter model (`3b` or `1.5b`) in the settings panel.
+#### 3. Ollama / Llama AI commands timeout
+Verify that the Ollama application is active in your system tray and that you have pulled the model (`ollama run llama3.2`).
 
 ---
 *Developed with ❤️ as a local Windows companion. Just A Rather Very Intelligent System.*
