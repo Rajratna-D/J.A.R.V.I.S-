@@ -6,7 +6,7 @@ activation:
   wake_word_enabled: false
 ai:
   context_turns: 10
-  model: qwen2.5-coder:7b
+  model: llama3.2
   ollama_host: http://localhost:11434
   timeout: 60
 apps:
