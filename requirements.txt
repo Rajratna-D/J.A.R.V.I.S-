@@ -17,11 +17,12 @@ keyboard                # Global hotkey listener (Alt+J)
 psutil                  # CPU, RAM, disk stats
 pygetwindow             # Window management
 pycaw                   # Windows Core Audio API (volume)
+comtypes                # COM interface bindings (required by pycaw)
 screen-brightness-control  # Brightness control via WMI
 pyautogui               # Screenshots, mouse, keyboard automation
 Pillow                  # Image processing for screenshots
 pyperclip               # Clipboard read/write
-pywin32                 # Windows API access (win32api, win32gui, win32con)
+pywin32                 # Windows API access (win32api, win32gui, pythoncom)
 
 # --- AI / LLM ---
 ollama                  # Ollama Python client for Qwen
@@ -47,11 +48,10 @@ PyYAML                  # settings.yaml parsing
 
 # --- Utilities ---
 colorama                # Colored terminal output
-python-dateutil         # Natural date/time parsing
 dateparser              # "in 30 minutes", "tomorrow at 9am" parsing
 fuzzywuzzy              # Fuzzy string matching for app names
 python-Levenshtein      # Speed boost for fuzzywuzzy
 
-# --- UI (Phase 1 — Terminal, Phase 2 — PyQt6) ---
+# --- UI (PyQt6 HUD overlay) ---
 PyQt6                   # GUI framework for HUD
 PyQt6-WebEngine         # WebEngine for HUD animations

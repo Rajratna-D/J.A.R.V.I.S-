@@ -21,6 +21,16 @@ from config import Config
 
 log = logging.getLogger("jarvis.ai")
 
+
+def _safe_print_ai(label: str, content: str):
+    """Print AI response to terminal, handling Windows encoding issues."""
+    divider = "=" * 60
+    try:
+        print(f"\n{divider}\n  JARVIS {label}:\n{divider}\n{content}\n{divider}\n")
+    except UnicodeEncodeError:
+        safe = content.encode("ascii", errors="replace").decode()
+        print(f"\n{divider}\n  JARVIS {label}:\n{divider}\n{safe}\n{divider}\n")
+
 JARVIS_SYSTEM_PROMPT = """You are J.A.R.V.I.S. (Just A Rather Very Intelligent System), 
 the AI assistant created for your user. You are intelligent, helpful, and slightly formal — 
 like the AI from Iron Man. Keep responses concise and practical. 
@@ -115,8 +125,7 @@ def handle_ai_code(intent: Intent) -> Response:
             {"role": "user", "content": prompt}
         ]
         response_text = client.chat(messages)
-        # Print full response to console (for code with syntax)
-        print(f"\n{'='*60}\n🤖 JARVIS AI Response:\n{'='*60}\n{response_text}\n{'='*60}\n")
+        _safe_print_ai("AI Response", response_text)
         # Speak a brief summary
         lines = response_text.split("\n")
         brief = next((l for l in lines if l.strip() and not l.startswith("```")), "Here's the code, Sir.")
@@ -145,7 +154,7 @@ def handle_ai_write(intent: Intent) -> Response:
             {"role": "user", "content": prompt}
         ]
         response_text = client.chat(messages)
-        print(f"\n{'='*60}\n🤖 JARVIS AI:\n{'='*60}\n{response_text}\n{'='*60}\n")
+        _safe_print_ai("AI", response_text)
         # Copy to clipboard for convenience
         pyperclip.copy(response_text)
         return Response(
@@ -174,7 +183,7 @@ def handle_ai_summarize(intent: Intent) -> Response:
             {"role": "user", "content": prompt}
         ]
         response_text = client.chat(messages)
-        print(f"\n{'='*60}\n🤖 JARVIS Summary:\n{'='*60}\n{response_text}\n{'='*60}\n")
+        _safe_print_ai("Summary", response_text)
         return Response(
             text=response_text[:300] + ("..." if len(response_text) > 300 else ""),
             data={"ai_response": response_text}
@@ -199,7 +208,7 @@ def handle_ai_debug(intent: Intent) -> Response:
             {"role": "user", "content": prompt}
         ]
         response_text = client.chat(messages)
-        print(f"\n{'='*60}\n🤖 JARVIS Debug:\n{'='*60}\n{response_text}\n{'='*60}\n")
+        _safe_print_ai("Debug", response_text)
         return Response(
             text=f"Analysis complete, {Config.username}. Check the terminal for the full diagnosis.",
             data={"ai_response": response_text}
@@ -242,7 +251,7 @@ def handle_ai_rephrase(intent: Intent) -> Response:
         ]
         response_text = client.chat(messages)
         pyperclip.copy(response_text)
-        print(f"\n{'='*60}\n🤖 Rephrased:\n{'='*60}\n{response_text}\n{'='*60}\n")
+        _safe_print_ai("Rephrased", response_text)
         return Response(
             text=f"Rephrased and copied to clipboard, {Config.username}.",
             data={"ai_response": response_text}
@@ -288,7 +297,7 @@ def handle_ai_chat(intent: Intent, session=None) -> Response:
         # Keep response to 300 chars for voice
         voice_resp = response_text[:300] + ("..." if len(response_text) > 300 else "")
         if len(response_text) > 300:
-            print(f"\n{'='*60}\n🤖 JARVIS:\n{response_text}\n{'='*60}\n")
+            _safe_print_ai("JARVIS", response_text)
 
         return Response(text=voice_resp, data={"ai_response": response_text})
     except Exception as e:
@@ -316,7 +325,7 @@ def handle_ai_query(intent: Intent) -> Response:
         response_text = client.chat(messages)
         voice_resp = response_text[:300] + ("..." if len(response_text) > 300 else "")
         if len(response_text) > 300:
-            print(f"\n{'='*60}\n🤖 JARVIS AI:\n{response_text}\n{'='*60}\n")
+            _safe_print_ai("AI", response_text)
         return Response(text=voice_resp, data={"ai_response": response_text})
     except Exception as e:
         log.error("AI query error: %s", e)

@@ -26,13 +26,13 @@ warnings = []
 def test(name, fn):
     try:
         fn()
-        print(f"  ✅ {name}")
+        print(f"  [OK] {name}")
     except ImportError as e:
         warnings.append(f"{name}: {e}")
-        print(f"  ⚠️  {name} — missing dep: {e}")
+        print(f"  [WARN] {name} -- missing dep: {e}")
     except Exception as e:
         errors.append(f"{name}: {e}")
-        print(f"  ❌ {name} — ERROR: {e}")
+        print(f"  [FAIL] {name} -- ERROR: {e}")
 
 
 # ── Config & DB ───────────────────────────────────────────
@@ -97,29 +97,28 @@ intent_ok = 0
 for cmd, expected in test_commands:
     intent = parser.parse(cmd)
     ok = intent.category == expected
-    status = "✅" if ok else "❌"
     if ok:
         intent_ok += 1
     else:
-        print(f"    {status} '{cmd}' → expected {expected!r}, got {intent.category!r}")
+        print(f"    [FAIL] '{cmd}' -> expected {expected!r}, got {intent.category!r}")
 
 if intent_ok == len(test_commands):
-    print(f"    ✅ All {intent_ok}/{len(test_commands)} intent patterns correct")
+    print(f"    [OK] All {intent_ok}/{len(test_commands)} intent patterns correct")
 else:
-    print(f"    ⚠️  {intent_ok}/{len(test_commands)} intent patterns correct")
+    print(f"    [WARN] {intent_ok}/{len(test_commands)} intent patterns correct")
 
 # ── Summary ───────────────────────────────────────────────
 print("\n" + "=" * 60)
 if errors:
-    print(f"  ❌ {len(errors)} ERROR(S) — JARVIS may not start:")
+    print(f"  [FAIL] {len(errors)} ERROR(S) -- JARVIS may not start:")
     for e in errors:
-        print(f"     • {e}")
+        print(f"     - {e}")
 elif warnings:
-    print(f"  ⚠️  {len(warnings)} WARNING(S) — Some features may be limited:")
+    print(f"  [WARN] {len(warnings)} WARNING(S) -- Some features may be limited:")
     for w in warnings:
-        print(f"     • {w}")
-    print("\n  ✅ Core systems OK — JARVIS should start.")
+        print(f"     - {w}")
+    print("\n  [OK] Core systems OK -- JARVIS should start.")
 else:
-    print("  ✅ ALL MODULES LOADED SUCCESSFULLY")
-    print("  ✅ JARVIS is ready to run: python main.py")
+    print("  [OK] ALL MODULES LOADED SUCCESSFULLY")
+    print("  [OK] JARVIS is ready to run: python main.py")
 print("=" * 60)

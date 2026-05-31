@@ -64,18 +64,45 @@ class Speaker:
     def _run(self):
         """Main loop for the TTS worker thread."""
         pythoncom.CoInitialize()
-        self._engine = self._init_engine()
+        try:
+            self._engine = self._init_engine()
+        except Exception as e:
+            log.error("TTS engine failed to initialise: %s", e)
+            # Drain the queue so callers don't hang forever
+            while True:
+                text = self._queue.get()
+                if text is None:
+                    break
+                self._queue.task_done()
+            return
+
         while True:
-            text = self._queue.get()
-            if text is None:   # Sentinel: shutdown signal
-                break
-            if Config.voice_enabled:
-                try:
-                    self._engine.say(text)
-                    self._engine.runAndWait()
-                except Exception as e:
-                    log.error("TTS error: %s", e)
-            self._queue.task_done()
+            try:
+                text = self._queue.get()
+                if text is None:   # Sentinel: shutdown signal
+                    break
+                if Config.voice_enabled:
+                    try:
+                        self._engine.say(text)
+                        self._engine.runAndWait()
+                    except Exception as e:
+                        log.error("TTS error: %s", e)
+                        # Re-initialise engine on failure (COM can go stale)
+                        try:
+                            self._engine = self._init_engine()
+                        except Exception:
+                            log.error("TTS engine re-init failed")
+                self._queue.task_done()
+            except Exception as e:
+                log.error("TTS thread unexpected error: %s", e)
+
+    @staticmethod
+    def _safe_print(text: str):
+        """Print response text, handling encoding issues on Windows."""
+        try:
+            print(f"\n  JARVIS: {text}\n")
+        except UnicodeEncodeError:
+            print(f"\n  JARVIS: {text.encode('ascii', errors='replace').decode()}\n")
 
     def speak(self, text: str):
         """
@@ -83,13 +110,14 @@ class Speaker:
         Non-blocking — returns immediately.
         """
         log.debug("Queuing speech: %s", text)
-        print(f"\n🤖 JARVIS: {text}\n")   # Always print even if voice disabled
+        self._safe_print(text)
         self._queue.put(text)
 
     def speak_sync(self, text: str):
         """
-        Speak and block until done (used for boot greeting).
+        Speak and block until done (used for command responses).
         """
+        self._safe_print(text)
         self._queue.put(text)
         self._queue.join()
 

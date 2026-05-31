@@ -1,77 +1,63 @@
-# ============================================================
-# J.A.R.V.I.S. Settings
-# Just A Rather Very Intelligent System
-# Edit these settings to personalize your JARVIS experience
-# ============================================================
-
-user:
-  name: "Sir"                        # How JARVIS addresses you
-  first_boot: true                   # Set to false after first run
-
-voice:
-  enabled: true                      # Master toggle for TTS voice output
-  speed: 175                         # Words per minute (150-220 recommended)
-  volume: 0.9                        # TTS volume (0.0 - 1.0)
-  whisper_model: "base"              # tiny | base | small | medium
-
 activation:
-  hotkey: "alt+j"                    # Global hotkey to trigger JARVIS
-  text_hotkey: "ctrl+space"          # Hotkey to focus text input
-  wake_word_enabled: false           # Requires Porcupine API key
-  wake_word: "jarvis"
-  listen_timeout: 6                  # Seconds of silence before stopping
-
-system:
-  screenshot_folder: "~/Pictures/JARVIS"  # Where screenshots are saved
-  default_browser: "chrome"               # chrome | edge | firefox
-  always_on_top: true                     # HUD always on top
-  notifications_enabled: true
-
+  hotkey: alt+j
+  listen_timeout: 6
+  text_hotkey: ctrl+space
+  wake_word: jarvis
+  wake_word_enabled: false
 ai:
-  ollama_host: "http://localhost:11434"
-  model: "qwen2.5-coder:7b"
-  context_turns: 10                  # Number of turns to keep in session memory
-  timeout: 60                        # Seconds before AI request timeout
-
-ui:
-  theme: "classic_blue"              # classic_blue | stealth_black | classic_red
-  boot_animation: true               # Show boot animation on launch
-  fps_target: 60
-
+  context_turns: 10
+  model: qwen2.5-coder:7b
+  ollama_host: http://localhost:11434
+  timeout: 60
 apps:
-  # Common app name → executable mapping
   aliases:
-    chrome: "chrome.exe"
-    google chrome: "chrome.exe"
-    firefox: "firefox.exe"
-    edge: "msedge.exe"
-    notepad: "notepad.exe"
-    calculator: "calc.exe"
-    explorer: "explorer.exe"
-    file explorer: "explorer.exe"
-    vs code: "code.exe"
-    vscode: "code.exe"
-    visual studio code: "code.exe"
-    spotify: "Spotify.exe"
-    discord: "Discord.exe"
-    telegram: "Telegram.exe"
-    whatsapp: "WhatsApp.exe"
-    word: "WINWORD.EXE"
-    excel: "EXCEL.EXE"
-    powerpoint: "POWERPNT.EXE"
-    outlook: "OUTLOOK.EXE"
-    steam: "steam.exe"
-    vlc: "vlc.exe"
-    obs: "obs64.exe"
-    terminal: "wt.exe"
-    powershell: "powershell.exe"
-    cmd: "cmd.exe"
-    task manager: "taskmgr.exe"
-    control panel: "control.exe"
-    settings: "ms-settings:"
-    paint: "mspaint.exe"
-    snipping tool: "SnippingTool.exe"
-
+    calculator: calc.exe
+    chrome: chrome.exe
+    cmd: cmd.exe
+    control panel: control.exe
+    discord: Discord.exe
+    edge: msedge.exe
+    excel: EXCEL.EXE
+    explorer: explorer.exe
+    file explorer: explorer.exe
+    firefox: firefox.exe
+    google chrome: chrome.exe
+    notepad: notepad.exe
+    obs: obs64.exe
+    outlook: OUTLOOK.EXE
+    paint: mspaint.exe
+    powerpoint: POWERPNT.EXE
+    powershell: powershell.exe
+    settings: 'ms-settings:'
+    snipping tool: SnippingTool.exe
+    spotify: Spotify.exe
+    steam: steam.exe
+    task manager: taskmgr.exe
+    telegram: Telegram.exe
+    terminal: wt.exe
+    visual studio code: code.exe
+    vlc: vlc.exe
+    vs code: code.exe
+    vscode: code.exe
+    whatsapp: WhatsApp.exe
+    word: WINWORD.EXE
+system:
+  always_on_top: true
+  default_browser: chrome
+  notifications_enabled: true
+  screenshot_folder: ~/Pictures/JARVIS
+ui:
+  boot_animation: true
+  fps_target: 60
+  theme: classic_blue
+user:
+  first_boot: true
+  name: Sir
+voice:
+  enabled: true
+  speed: 175
+  volume: 0.9
+  whisper_model: base
 weather:
-  location: ""                       # Leave blank for auto-detect
-  units: "metric"                    # metric | imperial
+  location: PUNE
+  units: metric

@@ -26,9 +26,10 @@ log = logging.getLogger("jarvis.listener")
 # ── Silence detection constants ────────────────────────────
 SAMPLE_RATE     = 16000   # Hz — Whisper expects 16kHz
 CHUNK_DURATION  = 0.5     # seconds per audio chunk
-SILENCE_THRESH  = 0.01    # RMS energy below this = silence
-SILENCE_CHUNKS  = 4       # consecutive silent chunks = stop recording
-MAX_DURATION    = 30      # max recording seconds (safety cap)
+SILENCE_THRESH  = 500     # RMS energy below this = silence (int16 scale: 0–32767)
+SILENCE_CHUNKS  = 3       # consecutive silent chunks after speech = stop recording
+MAX_DURATION    = 15      # max recording seconds (safety cap)
+WAIT_FOR_SPEECH = 12      # chunks (~6s) of silence before giving up waiting for speech
 
 
 class Listener:
@@ -68,6 +69,7 @@ class Listener:
         audio_chunks = []
         silent_count = 0
         got_speech = False
+        pre_speech_silence = 0   # Track how long we wait before speech starts
 
         log.debug("Recording started — waiting for speech...")
 
@@ -94,7 +96,12 @@ class Listener:
                         if silent_count >= SILENCE_CHUNKS:
                             log.debug("Silence detected — stopping recording")
                             break
-                    # If no speech yet, keep waiting (up to max_chunks)
+                    else:
+                        # No speech yet — give up after WAIT_FOR_SPEECH chunks
+                        pre_speech_silence += 1
+                        if pre_speech_silence >= WAIT_FOR_SPEECH:
+                            log.debug("No speech detected within timeout — giving up")
+                            break
 
         except Exception as e:
             log.error("Microphone error: %s", e)

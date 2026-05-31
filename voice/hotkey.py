@@ -48,7 +48,7 @@ class HotkeyManager:
         )
         self._registered = True
         log.info("Hotkey '%s' registered for JARVIS activation", hotkey)
-        print(f"✅ Hotkey [{hotkey.upper()}] registered — press to activate JARVIS")
+        print(f"  [OK] Hotkey [{hotkey.upper()}] registered -- press to activate JARVIS")
 
     def _on_trigger(self):
         """Called when hotkey is pressed — debounced."""

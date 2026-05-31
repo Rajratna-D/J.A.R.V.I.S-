@@ -2,26 +2,33 @@
 ============================================================
 J.A.R.V.I.S. — Logging Setup
 ============================================================
+Configures console (colourised) + rotating file logging.
+Log files rotate at 5 MB with 3 backups to prevent disk bloat.
 """
 
 import logging
+import logging.handlers
 import sys
-from pathlib import Path
 from config import Config
 
 
 def setup_logging(level=logging.INFO):
-    """Configure logging: console (colour) + file."""
+    """Configure logging: console (colour) + rotating file."""
     fmt = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
     date_fmt = "%H:%M:%S"
 
-    # File handler
+    # ── Rotating file handler (5 MB per file, keep 3 backups) ──
     log_file = Config.logs_dir / "jarvis.log"
-    file_handler = logging.FileHandler(str(log_file), encoding="utf-8")
+    file_handler = logging.handlers.RotatingFileHandler(
+        str(log_file),
+        maxBytes=5 * 1024 * 1024,   # 5 MB
+        backupCount=3,
+        encoding="utf-8",
+    )
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(logging.Formatter(fmt, date_fmt))
 
-    # Console handler
+    # ── Console handler (encoding-safe) ────────────────────────
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(level)
 
@@ -48,9 +55,12 @@ def setup_logging(level=logging.INFO):
 
     root = logging.getLogger()
     root.setLevel(logging.DEBUG)
-    root.addHandler(file_handler)
-    root.addHandler(console_handler)
+
+    # Avoid duplicate handlers on re-import
+    if not root.handlers:
+        root.addHandler(file_handler)
+        root.addHandler(console_handler)
 
     # Suppress noisy third-party loggers
-    for name in ["whisper", "urllib3", "httpx", "httpcore", "PIL"]:
+    for name in ["whisper", "urllib3", "httpx", "httpcore", "PIL", "comtypes"]:
         logging.getLogger(name).setLevel(logging.WARNING)

@@ -293,6 +293,10 @@ class JARVIS:
         log.info("Shutting down JARVIS...")
         self._running = False
         self.hotkey_mgr.unregister()
+        try:
+            self.speaker.stop()
+        except Exception:
+            pass
         print("\n  JARVIS offline. Goodbye.\n")
 
 
